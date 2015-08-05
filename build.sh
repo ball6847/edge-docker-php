@@ -3,7 +3,7 @@ set -e
 
 NGINX_VERSION=1.9.3
 NPS_VERSION=1.9.32.6
-PHP_VERSION=5.6.11
+PHP_VERSION=7.0.0beta2
 
 DEBIAN_FRONTEND=noninteractive
 
@@ -48,7 +48,7 @@ openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 apt-get install -y --no-install-recommends libcurl4-openssl-dev libreadline6-dev libmcrypt-dev libxml2-dev libpng-dev libjpeg-turbo8-dev libicu-dev
 mkdir /tmp/php
 mkdir -p /usr/local/etc/php/conf.d
-wget http://php.net/get/php-$PHP_VERSION.tar.bz2/from/this/mirror -O - | tar -jxf - -C /tmp/php --strip=1
+wget https://downloads.php.net/~ab/php-$PHP_VERSION.tar.bz2 -O - | tar -jxf - -C /tmp/php --strip=1
 cd /tmp/php
 ./configure \
     --with-config-file-path=/usr/local/etc/php \
@@ -73,10 +73,6 @@ cd /tmp/php
     --with-gd=shared
 make -j"$(nproc)"
 make install
-
-# download ioncube extension
-wget http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz -O - | tar -zxf - -C /tmp
-cp /tmp/ioncube/ioncube_loader_lin_5.6.so /usr/local/lib/php/extensions/no-debug-non-zts-20131226/ioncube.so
 
 # install composer
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
